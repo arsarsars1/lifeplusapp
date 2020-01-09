@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "34339953817",
+    "firebase_url": "https://lifeplusapp-c53ef.firebaseio.com",
+    "project_id": "lifeplusapp-c53ef",
+    "storage_bucket": "lifeplusapp-c53ef.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:34339953817:android:10b9cfa535be6c3cf02c08",
+        "android_client_info": {
+          "package_name": "com.lifeplusapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "34339953817-cfel5ohb57pdknv183ckbag82qqne0k5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.lifeplusapp",
+            "certificate_hash": "d02d8815ff74c676097d11d426dd60fb545979a9"
+          }
+        },
+        {
+          "client_id": "34339953817-raviverttomqo8vru25inkfp3gqkg3u3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCVcP6wadNhUfCWTEtyQyoOUnzxPsxpUG8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "34339953817-raviverttomqo8vru25inkfp3gqkg3u3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
