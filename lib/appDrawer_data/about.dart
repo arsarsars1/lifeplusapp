@@ -23,7 +23,7 @@ class AboutPage extends StatelessWidget {
                 child: Column(
                   children: <Widget>[
                     Text(
-                      "FlashChat",
+                      "Life Plus",
                       style: TextStyle(
                           fontSize: 22,
                           fontFamily: 'Source-Sans-Pro',

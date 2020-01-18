@@ -177,7 +177,7 @@ class SignInPage extends StatelessWidget {
                   ),
                   TyperAnimatedTextKit(
                     speed: Duration(
-                      seconds: 2,
+                      seconds: 1,
                     ),
                     textAlign: TextAlign.start,
                     alignment: AlignmentDirectional.bottomCenter,

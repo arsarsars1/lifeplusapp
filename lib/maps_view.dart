@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/services.dart';
+import 'package:lifeplusapp/database_accident.dart';
 import 'package:lifeplusapp/signin/common_widgets/platform_exception_alert_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ import 'package:lifeplusapp/signin/common_widgets/platform_alert_dialog.dart';
 import 'package:lifeplusapp/signin/common_widgets/platform_exception_alert_dialog.dart';
 import 'package:lifeplusapp/signin/constants/strings.dart';
 import 'package:lifeplusapp/signin/services/auth_service.dart';
+import 'package:lifeplusapp/viewAccident.dart';
 import 'package:provider/provider.dart';
 import 'package:rounded_floating_app_bar/rounded_floating_app_bar.dart';
 
@@ -255,7 +257,7 @@ class MyMapSampleState extends State<MyMap> {
               decoration: BoxDecoration(
                 image: DecorationImage(
                   fit: BoxFit.cover,
-                  image: AssetImage('assets/images/bgg.jpg'),
+                  image: AssetImage('assets/images/fire.jpg'),
                 ),
               ),
               currentAccountPicture: CircleAvatar(
@@ -314,8 +316,10 @@ class MyMapSampleState extends State<MyMap> {
             ),
             InkWell(
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute<void>(builder: (context) => ReachUs()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute<void>(
+                        builder: (context) => ReportAccident()));
               },
               child: ListTile(
                 leading: Icon(
@@ -324,6 +328,24 @@ class MyMapSampleState extends State<MyMap> {
                 ),
                 title: Text(
                   'Report Accident',
+                  textScaleFactor: 1.5,
+                ),
+              ),
+            ),
+            InkWell(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute<void>(
+                        builder: (context) => ViewAccident()));
+              },
+              child: ListTile(
+                leading: Icon(
+                  FontAwesomeIcons.solidEye,
+                  color: Theme.of(context).accentColor,
+                ),
+                title: Text(
+                  'View Accidents',
                   textScaleFactor: 1.5,
                 ),
               ),
