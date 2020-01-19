@@ -77,6 +77,7 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_flexible_toast/flutter_flexible_toast.dart';
+import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
@@ -419,7 +420,7 @@ class _ReportAccident extends State<ReportAccident> {
                   onTap: () => launchUrl("https://github.com/shivamkapasia0"),
                   child: Icon(
                     FontAwesomeIcons.github,
-                    color: Colors.blueGrey[800],
+                    color: Color(0xfffb3958),
                     size: 35,
                   ),
                 ),
@@ -436,8 +437,11 @@ class _ReportAccident extends State<ReportAccident> {
                   width: MediaQuery.of(context).size.width * 0.06,
                 ),
                 GestureDetector(
-                  onTap: () {},
-                  child: Icon(FontAwesomeIcons.whatsapp,
+                  onTap: () {
+                    FlutterOpenWhatsapp.sendSingleMessage(
+                        "918179015345", "Hello");
+                  },
+                  child: Icon(FontAwesomeIcons.twitter,
                       color: Color(0xfffb3958), size: 35),
                 ),
               ],
@@ -452,7 +456,7 @@ class _ReportAccident extends State<ReportAccident> {
     FlutterFlexibleToast.showToast(
         message: "Accident Reported",
         toastLength: Toast.LENGTH_LONG,
-        toastGravity: ToastGravity.TOP,
+        toastGravity: ToastGravity.CENTER,
         icon: ICON.SUCCESS,
         radius: 100,
         elevation: 10,
@@ -466,7 +470,7 @@ class _ReportAccident extends State<ReportAccident> {
         message: "Report Deleted",
         toastLength: Toast.LENGTH_LONG,
         toastGravity: ToastGravity.TOP,
-        icon: ICON.SUCCESS,
+        icon: ICON.LOADING_SUCCESS,
         radius: 100,
         elevation: 10,
         textColor: Colors.white,

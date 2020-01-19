@@ -1,7 +1,10 @@
 import 'dart:async';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/services.dart';
+import 'package:giffy_dialog/giffy_dialog.dart';
 import 'package:lifeplusapp/database_accident.dart';
+import 'package:lifeplusapp/privacyPolicy.dart';
 import 'package:lifeplusapp/signin/common_widgets/platform_exception_alert_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -77,6 +80,36 @@ class MyMap extends StatefulWidget {
 //  }
 //}
 class MyMapSampleState extends State<MyMap> {
+  ///Firebase Messaging
+  String _message = '';
+  int navbarselectedIndex = 0;
+  bool newNotification = false;
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+
+  _register() {
+    _firebaseMessaging.getToken().then((token) => print(token));
+  }
+
+  void getMessage() {
+    _firebaseMessaging.configure(
+        onMessage: (Map<String, dynamic> message) async {
+      print('on message $message');
+      setState(() {
+        newNotification = true;
+        _message = message['notification']['title'];
+      });
+//      setState(() =>
+//      _message = message["notification"]["title"]);
+    }, onResume: (Map<String, dynamic> message) async {
+      print('on resume $message');
+      setState(() => _message = message["notification"]["title"]);
+    }, onLaunch: (Map<String, dynamic> message) async {
+      print('on launch $message');
+      setState(() => _message = message["notification"]["title"]);
+    });
+  }
+
+  ///
   Future<void> _signOut(BuildContext context) async {
     try {
       final AuthService auth = Provider.of<AuthService>(context);
@@ -111,6 +144,7 @@ class MyMapSampleState extends State<MyMap> {
   @override
   void initState() {
     super.initState();
+    getMessage();
     _getUserLocation();
     _getUserLocation();
     getVehicleSpeed();
@@ -357,8 +391,28 @@ class MyMapSampleState extends State<MyMap> {
               },
               child: ListTile(
                 leading: Icon(
-                  FontAwesomeIcons.bolt,
+                  FontAwesomeIcons.phoneAlt,
                   color: Theme.of(context).accentColor,
+                ),
+                title: Text(
+                  'Ask Help',
+                  textScaleFactor: 1.5,
+                ),
+              ),
+            ),
+            InkWell(
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute<void>(builder: (context) => ReachUs()));
+              },
+              child: ListTile(
+                leading: Icon(
+                  FontAwesomeIcons.bell,
+                  color: Theme.of(context).accentColor,
+                ),
+                trailing: Icon(
+                  FontAwesomeIcons.solidBell,
+                  color: Colors.deepOrange,
                 ),
                 title: Text(
                   'Notifications',
@@ -454,7 +508,28 @@ class MyMapSampleState extends State<MyMap> {
             subtitle: "Stay Connecting With Your Friends & Family.",
             subTitleColor: Colors.white,
             backgroundColor: Colors.green,
-            onTap: () => print('SECOND CHILD'),
+            onTap: () {
+              showDialog(
+                  context: context,
+                  builder: (_) => NetworkGiffyDialog(
+                        image: Image.network(
+                          "https://raw.githubusercontent.com/Shashank02051997/FancyGifDialog-Android/master/GIF's/gif14.gif",
+                          fit: BoxFit.cover,
+                        ),
+                        entryAnimation: EntryAnimation.TOP_LEFT,
+                        title: Text(
+                          'Help',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 22.0, fontWeight: FontWeight.w600),
+                        ),
+                        description: Text(
+                          'Press power button 3 times in case of emergency',
+                          textAlign: TextAlign.center,
+                        ),
+                        onOkButtonPressed: () {},
+                      ));
+            },
           ),
           MenuItem(
             child: Icon(Icons.account_box, color: Colors.black),
@@ -511,20 +586,22 @@ class MyMapSampleState extends State<MyMap> {
                 Align(
                   alignment: Alignment.topRight,
                   child: Container(
-                      margin: EdgeInsets.fromLTRB(0.0, 650.0, 0.0, 0.0),
+                      margin: EdgeInsets.fromLTRB(0.0, 620.0, 0.0, 0.0),
                       child: Column(
                         children: <Widget>[
                           mapButton(_onAddMarkerButtonPressed,
                               Icon(Icons.add_location), Colors.blue),
+                          mapButton(_onMapTypeButtonPressed, Icon(Icons.help),
+                              Colors.blue),
 //                          mapButton(
 //                              _onMapTypeButtonPressed,
 //                              Icon(
-//                                IconData(0xf473,
+//                                FontAwesomeIcons.heartbeat,
 //                                    fontFamily: CupertinoIcons.iconFont,
 //                                    fontPackage:
 //                                        CupertinoIcons.iconFontPackage),
 //                              ),
-//                              Colors.green),
+                          //  Colors.green),
 //                          mapButton(
 //                              _onMapTypeButtonPressed,
 //                              Icon(

@@ -3,6 +3,7 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_flexible_toast/flutter_flexible_toast.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
@@ -135,11 +136,12 @@ class _ViewAccident extends State<ViewAccident> {
                 child: Container(
                   padding: EdgeInsets.fromLTRB(20.0, 40.0, 20.0, 30.0),
                   decoration: BoxDecoration(
-                      color: Theme.of(context).cardColor,
-                      borderRadius: BorderRadius.circular(12.0),
-                      image: DecorationImage(
-                          image: AssetImage("assets/images/app.png"),
-                          fit: BoxFit.scaleDown)),
+                    color: Theme.of(context).cardColor,
+                    borderRadius: BorderRadius.circular(12.0),
+//                      image: DecorationImage(
+//                          image: AssetImage("assets/images/app.png"),
+//                          fit: BoxFit.scaleDown)
+                  ),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -160,13 +162,44 @@ class _ViewAccident extends State<ViewAccident> {
               height: MediaQuery.of(context).size.height * 0.01,
             ),
             Card(
+              margin: EdgeInsets.all(10.0),
+              elevation: 2.0,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12)),
+              child: Container(
+                padding: EdgeInsets.fromLTRB(20.0, 40.0, 20.0, 30.0),
+                decoration: BoxDecoration(
+                    color: Theme.of(context).cardColor,
+                    borderRadius: BorderRadius.circular(12.0),
+                    image: DecorationImage(
+                        image: AssetImage("assets/images/app.png"),
+                        fit: BoxFit.scaleDown)),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      'Accident Reported By ' + namee.toString(),
+                      style: TextStyle(
+                          color: Theme.of(context).accentColor,
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w800),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.01,
+            ),
+            Card(
               color: Colors.green,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12.0),
               ),
               margin: EdgeInsets.symmetric(horizontal: 10.0),
               child: GestureDetector(
-                onTap: () {
+                onTap: () async {
                   getData();
                   showCenterShortLoadingToast();
                 },

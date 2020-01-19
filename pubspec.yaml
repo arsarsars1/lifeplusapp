@@ -47,6 +47,11 @@ dependencies:
   bot_toast: ^2.2.1
   intl: ^0.16.1
 
+  flutter_spinkit: ^4.1.1
+  flutter_open_whatsapp: ^0.1.2
+  giffy_dialog:
+  firebase_messaging: ^6.0.9
+
 
 dev_dependencies:
   flutter_test:
