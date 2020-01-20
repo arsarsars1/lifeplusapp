@@ -18,6 +18,16 @@ class _ReachUsState extends State<ReachUs> {
     }
   }
 
+  _launchURLMail() async {
+    const url =
+        'mailto:smith@example.org?subject=LifePlusApp&body=Your sugestions%20or Feedback..';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   TextEditingController t1 = TextEditingController();
   TextEditingController t2 = TextEditingController();
   String name;
@@ -144,7 +154,7 @@ class _ReachUsState extends State<ReachUs> {
                     t1.clear();
                     t2.clear();
                     launchUrl(
-                        "mailto:kapasiashivam007@gmail.com?subject=From $name&body=$message");
+                        "mailto:lifeplusapp2020@gmail.com?subject=From $name&body=$message");
                   });
                 },
                 child: ListTile(
@@ -181,7 +191,7 @@ class _ReachUsState extends State<ReachUs> {
                   right: 21,
                   bottom: MediaQuery.of(context).size.height * 0.034),
               child: Text(
-                "Alternatively, you can also check us out on the following platforms",
+                "Alternatively, you can also report bugs and errors on following platforms",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: 'RobotoSlab',
@@ -195,10 +205,11 @@ class _ReachUsState extends State<ReachUs> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 GestureDetector(
-                  onTap: () => launchUrl("https://github.com/shivamkapasia0"),
+                  onTap: () => launchUrl(
+                      "https://github.com/shivamkapasia0/lifeplusapp"),
                   child: Icon(
                     FontAwesomeIcons.github,
-                    color: Colors.blueGrey[800],
+                    color: Colors.orange,
                     size: 35,
                   ),
                 ),
@@ -206,17 +217,17 @@ class _ReachUsState extends State<ReachUs> {
                   width: MediaQuery.of(context).size.width * 0.06,
                 ),
                 GestureDetector(
-                  onTap: () =>
-                      launchUrl("https://www.instagram.com/shivaay0o7/"),
-                  child: Icon(FontAwesomeIcons.instagram,
+                  onTap: () => launchUrl(
+                      "https://play.google.com/store/apps/details?id=com.lifeplusapp&hl=en_IN"),
+                  child: Icon(FontAwesomeIcons.googlePlay,
                       color: Color(0xfffb3958), size: 35),
                 ),
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.06,
                 ),
                 GestureDetector(
-                  onTap: () => launchUrl("https://twitter.com/shivaay0o7"),
-                  child: Icon(FontAwesomeIcons.twitter,
+                  onTap: () => _launchURLMail(),
+                  child: Icon(FontAwesomeIcons.at,
                       color: Color(0xff1DA1F2), size: 35),
                 ),
               ],

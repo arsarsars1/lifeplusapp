@@ -2,9 +2,13 @@ import 'dart:async';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:giffy_dialog/giffy_dialog.dart';
+import 'package:lifeplusapp/about_us.dart';
 import 'package:lifeplusapp/database_accident.dart';
+import 'package:lifeplusapp/license.dart';
 import 'package:lifeplusapp/privacyPolicy.dart';
+import 'package:lifeplusapp/settingPage.dart';
 import 'package:lifeplusapp/signin/common_widgets/platform_exception_alert_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -239,40 +243,39 @@ class MyMapSampleState extends State<MyMap> {
       appBar: AppBar(
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.exit_to_app),
-            color: Colors.black,
+            icon: Icon(FontAwesomeIcons.powerOff),
+            color: Theme.of(context).accentColor,
             onPressed: () => _confirmSignOut(context),
           ),
         ],
-        backgroundColor: Colors.white,
         title: Text(
           "Life Plus",
           textAlign: TextAlign.center,
           style: TextStyle(
-            color: Colors.black,
+            color: Theme.of(context).accentColor,
             fontSize: 30,
           ),
         ),
-        leading: InkWell(
-          onTap: () {
-            Drawer();
-          },
-          child: CircleAvatar(
-            backgroundColor: Colors.transparent,
-            radius: 20.0,
-            child: ClipOval(
-              child: new SizedBox(
-                width: 40.0,
-                height: 40.0,
-                child: new Image.network(user.photoUrl),
-              ),
-            ),
-          ),
-        ),
+//        leading: InkWell(
+//          onTap: () {
+//            Drawer();
+//          },
+//          child: CircleAvatar(
+//            backgroundColor: Colors.transparent,
+//            radius: 20.0,
+//            child: ClipOval(
+//              child: new SizedBox(
+//                width: 40.0,
+//                height: 40.0,
+//                child: new Image.network(user.photoUrl),
+//              ),
+//            ),
+//          ),
+//        ),
       ),
-      drawer: Drawer(
+      drawer: new Drawer(
         elevation: 80.0,
-        child: ListView(
+        child: new ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
             UserAccountsDrawerHeader(
@@ -291,7 +294,7 @@ class MyMapSampleState extends State<MyMap> {
               decoration: BoxDecoration(
                 image: DecorationImage(
                   fit: BoxFit.cover,
-                  image: AssetImage('assets/images/fire.jpg'),
+                  image: AssetImage('assets/images/road.jpg'),
                 ),
               ),
               currentAccountPicture: CircleAvatar(
@@ -428,7 +431,7 @@ class MyMapSampleState extends State<MyMap> {
                 Navigator.push(
                     context,
                     MaterialPageRoute<void>(
-                        builder: (context) => PrivacyPolicy()));
+                        builder: (context) => SettingPage()));
               },
               child: ListTile(
                 leading: Icon(
@@ -471,9 +474,43 @@ class MyMapSampleState extends State<MyMap> {
                   color: Theme.of(context).accentColor,
                 ),
                 title: Text(
+                  'About App',
+                  textScaleFactor: 1.5,
+                ),
+              ),
+            ),
+            InkWell(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute<void>(
+                        builder: (context) => AboutUsPage()));
+              },
+              child: ListTile(
+                leading: Icon(
+                  FontAwesomeIcons.users,
+                  color: Theme.of(context).accentColor,
+                ),
+                title: Text(
                   'About Us',
                   textScaleFactor: 1.5,
                 ),
+              ),
+            ),
+            Divider(
+              thickness: 2,
+            ),
+            InkWell(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute<void>(
+                        builder: (context) => LicensePolicy()));
+              },
+              child: ListTile(
+                leading: Text('License  © 2020'),
+                trailing: Text('LifePlus v 1.0    '),
+                title: Icon(FontAwesomeIcons.scroll),
               ),
             ),
           ],
@@ -560,11 +597,20 @@ class MyMapSampleState extends State<MyMap> {
       body: _initialPosition == null
           ? Container(
               child: Center(
-                child: Text(
-                  'loading map..',
-                  style: TextStyle(
-                      fontFamily: 'Avenir-Medium', color: Colors.grey[400]),
+                child: SpinKitFadingCircle(
+                  itemBuilder: (BuildContext context, int index) {
+                    return DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: index.isEven ? Colors.red : Colors.green,
+                      ),
+                    );
+                  },
                 ),
+//                child: Text(
+//                  'loading map..',
+//                  style: TextStyle(
+//                      fontFamily: 'Avenir-Medium', color: Colors.grey[400]),
+//                ),
               ),
             )
           : Container(

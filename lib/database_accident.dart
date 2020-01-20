@@ -83,6 +83,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:lifeplusapp/signin/services/auth_service.dart';
 import 'package:provider/provider.dart';
+import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ReportAccident extends StatefulWidget {
@@ -110,6 +111,30 @@ class _ReportAccident extends State<ReportAccident> {
     });
   }
 
+  @override
+  void initState() {
+    getCurrentLocation();
+    _getCurrentLocation();
+    _getAddressFromLatLng();
+  }
+
+  ///Location Function
+  double latitude;
+  double longitude;
+
+  Future<void> getCurrentLocation() async {
+    try {
+      Position position = await Geolocator()
+          .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+      latitude = position.latitude;
+      longitude = position.longitude;
+      print(position);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  ///
   _getAddressFromLatLng() async {
     try {
       List<Placemark> p = await geolocator.placemarkFromCoordinates(
@@ -157,8 +182,8 @@ class _ReportAccident extends State<ReportAccident> {
         'Date': formattedDate,
         'Time': res,
         'Description': '$message',
-        'longitude': _currentPosition.longitude.toString(),
-        'latitude': _currentPosition.latitude.toString(),
+        'longitude': longitude.toString(),
+        'latitude': latitude.toString(),
         'location': '$_currentAddress'
       });
 //      databaseReference.child("2").set({
@@ -326,7 +351,7 @@ class _ReportAccident extends State<ReportAccident> {
 //                    launchUrl(
 //                        "mailto:kapasiashivam007@gmail.com?subject=From $name&body=$message");
 //                  });
-
+                  getCurrentLocation();
                   _getCurrentLocation();
                   createRecord();
                   showCenterShortLoadingToast();
@@ -403,7 +428,7 @@ class _ReportAccident extends State<ReportAccident> {
                   right: 21,
                   bottom: MediaQuery.of(context).size.height * 0.034),
               child: Text(
-                "Alternatively, you can also check us out on the following platforms",
+                "Alternatively, you can also share your location by clicking button",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: 'RobotoSlab',
@@ -416,34 +441,63 @@ class _ReportAccident extends State<ReportAccident> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                GestureDetector(
-                  onTap: () => launchUrl("https://github.com/shivamkapasia0"),
-                  child: Icon(
-                    FontAwesomeIcons.github,
-                    color: Color(0xfffb3958),
-                    size: 35,
-                  ),
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.06,
-                ),
-                GestureDetector(
-                  onTap: () =>
-                      launchUrl("https://www.instagram.com/shivaay0o7/"),
-                  child: Icon(FontAwesomeIcons.instagram,
-                      color: Color(0xfffb3958), size: 35),
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.06,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    FlutterOpenWhatsapp.sendSingleMessage(
-                        "918179015345", "Hello");
-                  },
-                  child: Icon(FontAwesomeIcons.twitter,
-                      color: Color(0xfffb3958), size: 35),
-                ),
+//                GestureDetector(
+//                  onTap: () => launchUrl("https://github.com/shivamkapasia0"),
+//                  child: Icon(
+//                    FontAwesomeIcons.github,
+//                    color: Color(0xfffb3958),
+//                    size: 35,
+//                  ),
+//                ),
+//                SizedBox(
+//                  width: MediaQuery.of(context).size.width * 0.06,
+//                ),
+//                GestureDetector(
+//                  onTap: () =>
+//                      launchUrl("https://www.instagram.com/shivaay0o7/"),
+//                  child: Icon(FontAwesomeIcons.instagram,
+//                      color: Color(0xfffb3958), size: 35),
+//                ),
+//                SizedBox(
+//                  width: MediaQuery.of(context).size.width * 0.06,
+//                ),
+//                GestureDetector(
+//                  onTap: () {
+//                    FlutterOpenWhatsapp.sendSingleMessage(
+//                        "918179015345", "Hello");
+//                  },
+//                  child: Icon(FontAwesomeIcons.twitter,
+//                      color: Color(0xfffb3958), size: 35),
+//                ),
+//                SizedBox(
+//                  width: MediaQuery.of(context).size.width * 0.06,
+//                ),
+//                GestureDetector(
+//                  onTap: () {
+//                    getCurrentLocation();
+//                    Share.share('Hey I need your help at ' +
+//                        'https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}');
+//                  },
+//                  child: Icon(FontAwesomeIcons.solidMap,
+//                      color: Color(0xfffb3958), size: 35),
+//                ),
+                RaisedButton(
+                    color: Color(0xffffffff),
+                    child: Text(
+                      'Share My Location',
+                      style: TextStyle(
+                        color: Color(0xff6200ee),
+                      ),
+                    ),
+                    onPressed: () {
+                      showCenterShortLoadingToastShare_Button();
+                      getCurrentLocation();
+                      Share.share('Hey I need your help at ' +
+                          'https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}');
+                    },
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                    )),
               ],
             ),
           ],
@@ -471,6 +525,19 @@ class _ReportAccident extends State<ReportAccident> {
         toastLength: Toast.LENGTH_LONG,
         toastGravity: ToastGravity.TOP,
         icon: ICON.LOADING_SUCCESS,
+        radius: 100,
+        elevation: 10,
+        textColor: Colors.white,
+        backgroundColor: Colors.black,
+        timeInSeconds: 2);
+  }
+
+  void showCenterShortLoadingToastShare_Button() {
+    FlutterFlexibleToast.showToast(
+        message: "Loading sharing options..",
+        toastLength: Toast.LENGTH_LONG,
+        toastGravity: ToastGravity.BOTTOM,
+        icon: ICON.LOADING,
         radius: 100,
         elevation: 10,
         textColor: Colors.white,

@@ -46,7 +46,7 @@ dependencies:
   flutter_flexible_toast: ^0.1.2
   bot_toast: ^2.2.1
   intl: ^0.16.1
-
+  share: ^0.6.3+5
   flutter_spinkit: ^4.1.1
   flutter_open_whatsapp: ^0.1.2
   giffy_dialog:

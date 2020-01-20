@@ -1,15 +1,16 @@
-import 'dart:async';
-
-import 'package:lifeplusapp/signin/app/sign_in/developer_menu.dart';
-import 'package:lifeplusapp/signin/common_widgets/avatar.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:lifeplusapp/appDrawer_data/openSourceLicenses.dart';
+import 'package:lifeplusapp/appDrawer_data/privacypolicy.dart';
+import 'package:lifeplusapp/appDrawer_data/termsOfservices.dart';
 import 'package:lifeplusapp/signin/common_widgets/platform_alert_dialog.dart';
 import 'package:lifeplusapp/signin/common_widgets/platform_exception_alert_dialog.dart';
-import 'package:lifeplusapp/signin/constants/keys.dart';
 import 'package:lifeplusapp/signin/constants/strings.dart';
 import 'package:lifeplusapp/signin/services/auth_service.dart';
-import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter/services.dart';
+import 'package:share/share.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatelessWidget {
   Future<void> _signOut(BuildContext context) async {
@@ -36,52 +37,179 @@ class HomePage extends StatelessWidget {
     }
   }
 
+  launchUrl(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
-    return Scaffold(
-      drawer: DeveloperMenu(),
-      floatingActionButton: InkWell(onTap: () {}, child: Icon(Icons.map)),
-      appBar: AppBar(
-        title: Text(Strings.homePage),
-        actions: <Widget>[
-          FlatButton(
-            key: Key(Keys.logout),
-            child: Text(
-              Strings.logout,
-              style: TextStyle(
-                fontSize: 18.0,
-                color: Colors.white,
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Theme.of(context).primaryColor,
+        body: Stack(
+          children: <Widget>[
+            Container(
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                    Colors.orange,
+                    Colors.blue,
+                    Colors.yellow,
+                    Colors.green,
+                    Colors.teal
+                  ])
+//                image: DecorationImage(
+//                  image: AssetImage(
+//                      'assets/images/road.jpg'), // <-- BACKGROUND IMAGE
+//                  fit: BoxFit.cover,
+//                ),
+                  ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height * 0.1),
+              child: Center(
+                child: Column(
+                  children: <Widget>[
+                    CircleAvatar(
+                      backgroundColor: Colors.transparent,
+                      radius: MediaQuery.of(context).size.width * 0.107,
+                      child: ClipOval(
+                        child: Image.network(user.photoUrl),
+                      ),
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.01,
+                    ),
+                    Card(
+                      margin: EdgeInsets.all(10.0),
+                      elevation: 2.0,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12)),
+                      child: Container(
+                        padding: EdgeInsets.fromLTRB(20.0, 40.0, 20.0, 30.0),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).cardColor,
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text(
+                              'Name : ' + user.displayName,
+                              style: TextStyle(
+                                  color: Theme.of(context).accentColor,
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w800),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.01,
+                    ),
+                    Card(
+                      margin: EdgeInsets.all(10.0),
+                      elevation: 2.0,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12)),
+                      child: Container(
+                        padding: EdgeInsets.fromLTRB(20.0, 40.0, 20.0, 30.0),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).cardColor,
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text(
+                              'Email id : ' + user.email,
+                              style: TextStyle(
+                                  color: Theme.of(context).accentColor,
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w800),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.01,
+                    ),
+                    Card(
+                      margin: EdgeInsets.all(10.0),
+                      elevation: 2.0,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12)),
+                      child: Container(
+                        padding: EdgeInsets.fromLTRB(20.0, 40.0, 20.0, 30.0),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).cardColor,
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text(
+                              'User id : ' + user.uid,
+                              style: TextStyle(
+                                  color: Theme.of(context).accentColor,
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w800),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.width * 0.02,
+                    ),
+                    RaisedButton(
+                        color: Color(0xffffffff),
+                        child: Text(
+                          'Sign Out',
+                          style: TextStyle(
+                            color: Color(0xff6200ee),
+                          ),
+                        ),
+                        onPressed: () {
+                          _confirmSignOut(context);
+                        },
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                        )),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.width * 0.08,
+                    ),
+                    RaisedButton(
+                        //  color: Color(0xffffffff),
+                        child: Icon(
+                          FontAwesomeIcons.home,
+                        ),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                        )),
+                  ],
+                ),
               ),
             ),
-            onPressed: () => _confirmSignOut(context),
-          ),
-        ],
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(130.0),
-          child: _buildUserInfo(user),
+          ],
         ),
       ),
-    );
-  }
-
-  Widget _buildUserInfo(User user) {
-    return Column(
-      children: [
-        Avatar(
-          photoUrl: user.photoUrl,
-          radius: 50,
-          borderColor: Colors.black54,
-          borderWidth: 2.0,
-        ),
-        SizedBox(height: 8),
-        if (user.displayName != null)
-          Text(
-            user.displayName,
-            style: TextStyle(color: Colors.white),
-          ),
-        SizedBox(height: 8),
-      ],
     );
   }
 }

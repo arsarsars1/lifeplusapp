@@ -44,7 +44,17 @@ class MyApp extends StatelessWidget {
       child: AuthWidgetBuilder(
           builder: (BuildContext context, AsyncSnapshot<User> userSnapshot) {
         return MaterialApp(
-          theme: ThemeData(primarySwatch: Colors.indigo),
+          theme: ThemeData(
+            brightness: Brightness.light,
+            primaryColor: Colors.white,
+          ),
+          darkTheme: ThemeData(
+            /*For Automatic brightness/Theme of App */
+            brightness: Brightness.dark,
+            primaryColor: Colors.black38,
+            // primaryColor: Color.fromRGBO(48, 48, 48, 1),
+          ),
+          //primarySwatch: Colors.indigo),
           home: EmailLinkErrorPresenter.create(
             context,
             child: AuthWidget(userSnapshot: userSnapshot),
