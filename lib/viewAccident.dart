@@ -10,6 +10,7 @@ import 'package:intl/intl.dart';
 import 'package:lifeplusapp/products.dart';
 import 'package:lifeplusapp/signin/services/auth_service.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ViewAccident extends StatefulWidget {
@@ -19,6 +20,13 @@ class ViewAccident extends StatefulWidget {
 
 class _ViewAccident extends State<ViewAccident> {
   final databaseReference = FirebaseDatabase.instance.reference();
+  void showData() async {
+    SharedPreferences myPrefs = await SharedPreferences.getInstance();
+    final String number = myPrefs.getString('number');
+    print(number);
+    final int age = myPrefs.getInt('age');
+    final bool syncData = myPrefs.getBool('syncData');
+  }
 
   launchUrl(String url) async {
     if (await canLaunch(url)) {
@@ -39,16 +47,19 @@ class _ViewAccident extends State<ViewAccident> {
   String Date;
   String Time;
   String Description;
-  List<String> _products = [];
+  String Accident;
+  var arr = new List(5);
+
+  List<_ViewAccident> list;
   @override
   void initState() {
     super.initState();
     getData();
-    _products.add('Laptop');
   }
 
   Future<void> getData() async {
     setState(() {
+      //FirebaseDatabase.instance.reference().child("zoom_users");
       databaseReference.once().then((DataSnapshot snapshot) {
         print('Data : ${snapshot.value}');
         getdataValues = snapshot.value.toString();
@@ -56,7 +67,9 @@ class _ViewAccident extends State<ViewAccident> {
         Map<dynamic, dynamic> values = snapshot.value;
         values.forEach((key, values) {
           print('Reported by ' + values['Reported by']);
+
           namee = values['Reported by'];
+
           email = values['Reporter Email'];
           location = values['location'];
           Date = values['Date'];
@@ -107,8 +120,8 @@ class _ViewAccident extends State<ViewAccident> {
               ),
             ),
             InkWell(
-              onTap: () {
-                AwesomeDialog(
+              onTap: () async {
+                await AwesomeDialog(
                         context: context,
                         headerAnimationLoop: false,
                         dialogType: DialogType.INFO,
@@ -160,37 +173,37 @@ class _ViewAccident extends State<ViewAccident> {
                 ),
               ),
             ),
-//            SizedBox(
-//              height: MediaQuery.of(context).size.height * 0.01,
-//            ),
-//            Card(
-//              margin: EdgeInsets.all(10.0),
-//              elevation: 2.0,
-//              shape: RoundedRectangleBorder(
-//                  borderRadius: BorderRadius.circular(12)),
-//              child: Container(
-//                padding: EdgeInsets.fromLTRB(20.0, 40.0, 20.0, 30.0),
-//                decoration: BoxDecoration(
-//                    color: Theme.of(context).cardColor,
-//                    borderRadius: BorderRadius.circular(12.0),
-//                    image: DecorationImage(
-//                        image: AssetImage("assets/images/app.png"),
-//                        fit: BoxFit.scaleDown)),
-//                child: Row(
-//                  crossAxisAlignment: CrossAxisAlignment.center,
-//                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                  children: <Widget>[
-//                    Text(
-//                      'Accident Reported By ' + namee.toString(),
-//                      style: TextStyle(
-//                          color: Theme.of(context).accentColor,
-//                          fontSize: 16.0,
-//                          fontWeight: FontWeight.w800),
-//                    ),
-//                  ],
-//                ),
-//              ),
-//            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.01,
+            ),
+            Card(
+              margin: EdgeInsets.all(10.0),
+              elevation: 2.0,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12)),
+              child: Container(
+                padding: EdgeInsets.fromLTRB(20.0, 40.0, 20.0, 30.0),
+                decoration: BoxDecoration(
+                    color: Theme.of(context).cardColor,
+                    borderRadius: BorderRadius.circular(12.0),
+                    image: DecorationImage(
+                        image: AssetImage("assets/images/app.png"),
+                        fit: BoxFit.scaleDown)),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      'Accident Reported By ' + namee.toString(),
+                      style: TextStyle(
+                          color: Theme.of(context).accentColor,
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w800),
+                    ),
+                  ],
+                ),
+              ),
+            ),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.01,
             ),
@@ -203,6 +216,7 @@ class _ViewAccident extends State<ViewAccident> {
               child: GestureDetector(
                 onTap: () async {
                   getData();
+
                   showCenterShortLoadingToast();
                 },
                 child: ListTile(
@@ -260,4 +274,19 @@ class _ViewAccident extends State<ViewAccident> {
         backgroundColor: Colors.black,
         timeInSeconds: 2);
   }
+}
+
+class Post {
+  String title;
+  String name;
+  String email;
+  String message;
+  String getdataValues;
+  String namee;
+  String location;
+  String Date;
+  String Time;
+  String Description;
+  String content;
+  Post(this.name, this.email);
 }

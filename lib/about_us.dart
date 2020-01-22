@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -15,6 +16,9 @@ class AboutUsPage extends StatelessWidget {
   String arrows = '---------------*****---------------';
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(statusBarColor: Theme.of(context).primaryColor));
+
     return SafeArea(
       child: Scaffold(
         floatingActionButton: FloatingActionButton(
@@ -26,21 +30,21 @@ class AboutUsPage extends StatelessWidget {
         body: Stack(
           children: <Widget>[
             Container(
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                    Colors.blue,
-                    Colors.orange,
-                  ])
-//                image: DecorationImage(
-//                  image: AssetImage(
-//                      "assets/images/road.jpg"), // <-- BACKGROUND IMAGE
-//                  fit: BoxFit.cover,
-//                ),
-                  ),
-            ),
+//              decoration: BoxDecoration(
+//                  gradient: LinearGradient(
+//                      begin: Alignment.topLeft,
+//                      end: Alignment.bottomRight,
+//                      colors: [
+//                    Colors.blue,
+//                    Colors.orange,
+//                  ])
+////                image: DecorationImage(
+////                  image: AssetImage(
+////                      "assets/images/road.jpg"), // <-- BACKGROUND IMAGE
+////                  fit: BoxFit.cover,
+////                ),
+//                  ),
+                ),
             Padding(
               padding: EdgeInsets.only(
                   top: MediaQuery.of(context).size.height * 0.01),
@@ -81,8 +85,8 @@ class AboutUsPage extends StatelessWidget {
                           onTap: () =>
                               launchUrl("https://www.facebook.com/saditya05"),
                           child: Icon(
-                            FontAwesomeIcons.facebookSquare,
-                            color: Colors.blueGrey[900],
+                            FontAwesomeIcons.facebook,
+                            color: Colors.blue,
                             size: 35,
                           ),
                         ),
@@ -131,7 +135,7 @@ class AboutUsPage extends StatelessWidget {
                               "https://www.facebook.com/saket.jaiswal.92"),
                           child: Icon(
                             FontAwesomeIcons.facebook,
-                            color: Colors.blueGrey[900],
+                            color: Colors.blue,
                             size: 35,
                           ),
                         ),
@@ -177,7 +181,7 @@ class AboutUsPage extends StatelessWidget {
                               "https://www.facebook.com/profile.php?id=100003121304751"),
                           child: Icon(
                             FontAwesomeIcons.facebook,
-                            color: Colors.blueGrey[900],
+                            color: Colors.blue,
                             size: 35,
                           ),
                         ),
@@ -223,7 +227,7 @@ class AboutUsPage extends StatelessWidget {
                               launchUrl("https://github.com/shivamkapasia0"),
                           child: Icon(
                             FontAwesomeIcons.github,
-                            color: Colors.blueGrey[900],
+                            color: Colors.green,
                             size: 35,
                           ),
                         ),

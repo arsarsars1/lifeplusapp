@@ -149,7 +149,7 @@ class SignInPage extends StatelessWidget {
           children: <Widget>[
             Container(
               child: Image.asset(
-                "assets/images/fire.jpg",
+                "assets/images/road.jpg",
                 height: double.infinity,
                 width: double.infinity,
                 alignment: Alignment.center,
@@ -184,9 +184,9 @@ class SignInPage extends StatelessWidget {
                     isRepeatingAnimation: false,
                     textStyle: TextStyle(
                         color: Colors.green.shade200,
-                        fontSize: 40.0,
+                        fontSize: 50.0,
                         fontWeight: FontWeight.w900),
-                    text: <String>["LIFE PLUS APP"],
+                    text: <String>["Life +"],
                   ),
                 ],
               ),

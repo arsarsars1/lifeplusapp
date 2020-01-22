@@ -1,11 +1,15 @@
 import 'dart:async';
-
+import 'dart:io';
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:connectivity/connectivity.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:giffy_dialog/giffy_dialog.dart';
 import 'package:lifeplusapp/about_us.dart';
 import 'package:lifeplusapp/database_accident.dart';
+import 'package:lifeplusapp/emergency_contact.dart';
 import 'package:lifeplusapp/license.dart';
 import 'package:lifeplusapp/privacyPolicy.dart';
 import 'package:lifeplusapp/settingPage.dart';
@@ -113,6 +117,16 @@ class MyMapSampleState extends State<MyMap> {
     });
   }
 
+  String textValue = 'Hello World !';
+  update(String token) {
+    print(token);
+    DatabaseReference databaseReference = new FirebaseDatabase().reference();
+    databaseReference.child('fcm-token/${token}').set({"token": token});
+    textValue = token;
+    debugPrint(textValue);
+    setState(() {});
+  }
+
   ///
   Future<void> _signOut(BuildContext context) async {
     try {
@@ -173,6 +187,28 @@ class MyMapSampleState extends State<MyMap> {
         });
 
         print(speed);
+        if (speed >= 70) {
+          if (speed <= 1) {
+            startTimer();
+            AwesomeDialog(
+                context: context,
+                headerAnimationLoop: false,
+                dialogType: DialogType.WARNING,
+                animType: AnimType.BOTTOMSLIDE,
+                tittle: 'Do you need help?',
+                desc: 'Reporting Accident & Asking for help in ' +
+                    _start.toString() +
+                    "seconds, " +
+                    'Click on Cancel to ignore.',
+                btnCancelOnPress: () {},
+                btnOkOnPress: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute<void>(
+                          builder: (context) => ReportAccident()));
+                }).show();
+          }
+        }
       });
     } catch (e) {
       print(e);
@@ -180,6 +216,42 @@ class MyMapSampleState extends State<MyMap> {
   }
 
   ///End Speed Function
+  ///Timer Function
+  Timer _timer;
+  int _start = 30;
+
+  void startTimer() {
+    const oneSec = const Duration(seconds: 1);
+    _timer = new Timer.periodic(
+      oneSec,
+      (Timer timer) => setState(
+        () {
+          if (speed > 1) {
+            timer.cancel();
+          } else if (speed <= 1) {
+            _start = _start - 1;
+
+            if (_start == 0) {
+              timer.cancel();
+              super.dispose();
+              Navigator.push(
+                  context,
+                  MaterialPageRoute<void>(
+                      builder: (context) => ReportAccident()));
+            }
+          }
+        },
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  ///End Timer Function
   void _getUserLocation() async {
     Position position = await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
@@ -243,10 +315,21 @@ class MyMapSampleState extends State<MyMap> {
       appBar: AppBar(
         actions: <Widget>[
           IconButton(
-            icon: Icon(FontAwesomeIcons.powerOff),
-            color: Theme.of(context).accentColor,
-            onPressed: () => _confirmSignOut(context),
-          ),
+              icon: Icon(FontAwesomeIcons.powerOff),
+              color: Theme.of(context).accentColor,
+              onPressed: () {
+                AwesomeDialog(
+                    context: context,
+                    headerAnimationLoop: false,
+                    dialogType: DialogType.INFO,
+                    animType: AnimType.TOPSLIDE,
+                    tittle: 'Sign Out ?',
+                    desc: 'Are you sure to sign out?',
+                    btnCancelOnPress: () {},
+                    btnOkOnPress: () {
+                      _signOut(context);
+                    }).show();
+              }),
         ],
         title: Text(
           "Life Plus",
@@ -338,15 +421,15 @@ class MyMapSampleState extends State<MyMap> {
                 Navigator.push(
                     context,
                     MaterialPageRoute<void>(
-                        builder: (context) => Speedmeter()));
+                        builder: (context) => EmergencyContact()));
               },
               child: ListTile(
                 leading: Icon(
-                  FontAwesomeIcons.facebookMessenger,
+                  FontAwesomeIcons.hireAHelper,
                   color: Theme.of(context).accentColor,
                 ),
                 title: Text(
-                  'Messages',
+                  'Emergency contacts',
                   textScaleFactor: 1.5,
                 ),
               ),
@@ -527,15 +610,17 @@ class MyMapSampleState extends State<MyMap> {
         overlayOpacity: 0.7,
         children: [
           MenuItem(
-            child: Icon(Icons.accessibility, color: Colors.black),
+            child: Icon(FontAwesomeIcons.carCrash, color: Colors.black),
             title: "Report Accident",
             titleColor: Colors.white,
             subtitle: "You can Report Accident & Ask For Help.",
             subTitleColor: Colors.white,
             backgroundColor: Colors.deepOrange,
             onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute<void>(builder: (context) => HomePage()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute<void>(
+                      builder: (context) => ReportAccident()));
             },
           ),
           MenuItem(
@@ -569,7 +654,17 @@ class MyMapSampleState extends State<MyMap> {
             },
           ),
           MenuItem(
-            child: Icon(Icons.account_box, color: Colors.black),
+            child: CircleAvatar(
+              backgroundColor: Colors.transparent,
+              radius: 20.0,
+              child: ClipOval(
+                child: new SizedBox(
+                  width: 40.0,
+                  height: 40.0,
+                  child: new Image.network(user.photoUrl),
+                ),
+              ),
+            ),
             title: "My Profile",
             titleColor: Colors.white,
             subtitle: "You Can View your Profile.",
@@ -581,7 +676,7 @@ class MyMapSampleState extends State<MyMap> {
             },
           ),
           MenuItem(
-            child: Icon(Icons.directions_bike, color: Colors.black),
+            child: Icon(FontAwesomeIcons.car, color: Colors.black),
             title: "Your Speed is $speed km/h",
             titleColor: Colors.white,
             subtitle: "View Your Speed, History & More.",
@@ -637,8 +732,8 @@ class MyMapSampleState extends State<MyMap> {
                         children: <Widget>[
                           mapButton(_onAddMarkerButtonPressed,
                               Icon(Icons.add_location), Colors.blue),
-                          mapButton(_onMapTypeButtonPressed, Icon(Icons.help),
-                              Colors.blue),
+                          mapButton(_onMapTypeButtonPressed,
+                              Icon(FontAwesomeIcons.undo), Colors.blue),
 //                          mapButton(
 //                              _onMapTypeButtonPressed,
 //                              Icon(
@@ -663,5 +758,69 @@ class MyMapSampleState extends State<MyMap> {
               ]),
             ),
     );
+  }
+}
+
+class ConnectionStatusSingleton {
+  //This creates the single instance by calling the `_internal` constructor specified below
+  static final ConnectionStatusSingleton _singleton =
+      new ConnectionStatusSingleton._internal();
+  ConnectionStatusSingleton._internal();
+
+  //This is what's used to retrieve the instance through the app
+  static ConnectionStatusSingleton getInstance() => _singleton;
+
+  //This tracks the current connection status
+  bool hasConnection = false;
+
+  //This is how we'll allow subscribing to connection changes
+  StreamController connectionChangeController =
+      new StreamController.broadcast();
+
+  //flutter_connectivity
+  final Connectivity _connectivity = Connectivity();
+
+  //Hook into flutter_connectivity's Stream to listen for changes
+  //And check the connection status out of the gate
+  void initialize() {
+    _connectivity.onConnectivityChanged.listen(_connectionChange);
+    checkConnection();
+  }
+
+  Stream get connectionChange => connectionChangeController.stream;
+
+  //A clean up method to close our StreamController
+  //   Because this is meant to exist through the entire application life cycle this isn't
+  //   really an issue
+  void dispose() {
+    connectionChangeController.close();
+  }
+
+  //flutter_connectivity's listener
+  void _connectionChange(ConnectivityResult result) {
+    checkConnection();
+  }
+
+  //The test to actually see if there is a connection
+  Future<bool> checkConnection() async {
+    bool previousConnection = hasConnection;
+
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        hasConnection = true;
+      } else {
+        hasConnection = false;
+      }
+    } on SocketException catch (_) {
+      hasConnection = false;
+    }
+
+    //The connection status changed send out an update to all listeners
+    if (previousConnection != hasConnection) {
+      connectionChangeController.add(hasConnection);
+    }
+
+    return hasConnection;
   }
 }

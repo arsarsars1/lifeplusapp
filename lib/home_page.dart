@@ -10,6 +10,7 @@ import 'package:lifeplusapp/signin/constants/strings.dart';
 import 'package:lifeplusapp/signin/services/auth_service.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatelessWidget {
@@ -22,6 +23,23 @@ class HomePage extends StatelessWidget {
         title: Strings.logoutFailed,
         exception: e,
       ).show(context);
+    }
+  }
+
+  @override
+  void initState() {
+    showData();
+  }
+
+  String num;
+  void showData() async {
+    SharedPreferences myPrefs = await SharedPreferences.getInstance();
+    String number = myPrefs.getString('number');
+    if (number == '') {
+      num = "No Number Found";
+    } else {
+      print(number);
+      num = '+' + number;
     }
   }
 
@@ -54,24 +72,24 @@ class HomePage extends StatelessWidget {
         body: Stack(
           children: <Widget>[
             Container(
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                    Colors.orange,
-                    Colors.blue,
-                    Colors.yellow,
-                    Colors.green,
-                    Colors.teal
-                  ])
-//                image: DecorationImage(
-//                  image: AssetImage(
-//                      'assets/images/road.jpg'), // <-- BACKGROUND IMAGE
-//                  fit: BoxFit.cover,
-//                ),
-                  ),
-            ),
+//              decoration: BoxDecoration(
+//                  gradient: LinearGradient(
+//                      begin: Alignment.topLeft,
+//                      end: Alignment.bottomRight,
+//                      colors: [
+//                    Colors.orange,
+//                    Colors.blue,
+//                    Colors.yellow,
+//                    Colors.green,
+//                    Colors.teal
+//                  ])
+////                image: DecorationImage(
+////                  image: AssetImage(
+////                      'assets/images/road.jpg'), // <-- BACKGROUND IMAGE
+////                  fit: BoxFit.cover,
+////                ),
+//                  ),
+                ),
             Padding(
               padding: EdgeInsets.only(
                   top: MediaQuery.of(context).size.height * 0.1),
@@ -162,10 +180,10 @@ class HomePage extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Text(
-                              'User id : ' + user.uid,
+                              'UserId: ' + user.uid,
                               style: TextStyle(
                                   color: Theme.of(context).accentColor,
-                                  fontSize: 16.0,
+                                  fontSize: 14.0,
                                   fontWeight: FontWeight.w800),
                             ),
                           ],
@@ -193,9 +211,10 @@ class HomePage extends StatelessWidget {
                       height: MediaQuery.of(context).size.width * 0.08,
                     ),
                     RaisedButton(
-                        //  color: Color(0xffffffff),
+                        color: Color(0xffffffff),
                         child: Icon(
                           FontAwesomeIcons.home,
+                          color: Color(0xff6200ee),
                         ),
                         onPressed: () {
                           Navigator.pop(context);

@@ -77,7 +77,6 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_flexible_toast/flutter_flexible_toast.dart';
-import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
@@ -171,12 +170,11 @@ class _ReportAccident extends State<ReportAccident> {
     DateTime now = DateTime.now();
     TimeOfDay timeOfDay = TimeOfDay.fromDateTime(DateTime.now());
     String res = timeOfDay.format(context);
-    bool is12HoursFormat = res.contains(new RegExp(r'[A-Z]'));
     String formattedDate = DateFormat('EEE d MMM').format(now);
-//    String formattedTime = DateFormat('kk:mm:ss').format(now);
+
     void createRecord() {
       _getCurrentLocation();
-      databaseReference.child('Reported By ' + user.displayName).set({
+      databaseReference.child('Reported By ' + user.uid).set({
         'Reported by': user.displayName,
         'Reporter Email': user.email,
         'Date': formattedDate,
@@ -186,12 +184,6 @@ class _ReportAccident extends State<ReportAccident> {
         'latitude': latitude.toString(),
         'location': '$_currentAddress'
       });
-//      databaseReference.child("2").set({
-//        'Name': user.displayName,
-//        'Email': user.email,
-//        'Description': '$message',
-//        'location': ' & latitude'
-//      });
     }
 
     void getData() {
@@ -205,7 +197,7 @@ class _ReportAccident extends State<ReportAccident> {
     }
 
     void deleteData() {
-      databaseReference.child('Reported By ' + user.displayName).remove();
+      databaseReference.child('Reported By ' + user.uid).remove();
     }
 
     var checkedValue = true;
@@ -232,45 +224,6 @@ class _ReportAccident extends State<ReportAccident> {
                 textAlign: TextAlign.justify,
               ),
             ),
-//            SizedBox(
-//              height: MediaQuery.of(context).size.height * 0.02,
-//            ),
-//            Padding(
-//              padding: const EdgeInsets.all(10.0),
-//              child: TextField(
-//                onChanged: (val) {
-//                  if (val != null || val.length > 0) email = val;
-//                },
-//                controller: t1,
-//                decoration: InputDecoration(
-//                  fillColor: Color(0xffe6e6e6),
-//                  filled: true,
-//                  contentPadding:
-//                      EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-//                  hintText: user.email,
-//                  hintStyle: TextStyle(
-//                      color: Colors.blueGrey, fontFamily: 'RobotoSlab'),
-//                  border: OutlineInputBorder(
-//                    borderRadius: BorderRadius.all(
-//                      Radius.circular(12),
-//                    ),
-//                    borderSide: BorderSide(color: Colors.grey[400]),
-//                  ),
-//                  enabledBorder: OutlineInputBorder(
-//                    borderRadius: BorderRadius.all(
-//                      Radius.circular(12),
-//                    ),
-//                    borderSide: BorderSide(color: Colors.grey[400]),
-//                  ),
-//                  focusedBorder: OutlineInputBorder(
-//                    borderRadius: BorderRadius.all(
-//                      Radius.circular(12),
-//                    ),
-//                    borderSide: BorderSide(color: Colors.grey[400]),
-//                  ),
-//                ),
-//              ),
-//            ),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.0001,
             ),
@@ -313,7 +266,6 @@ class _ReportAccident extends State<ReportAccident> {
                 ),
               ),
             ),
-
             CheckboxListTile(
               title: Text("Include other info"),
               value: checkedValue,
@@ -333,7 +285,6 @@ class _ReportAccident extends State<ReportAccident> {
               controlAffinity:
                   ListTileControlAffinity.leading, //  <-- leading Checkbox
             ),
-
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.01,
             ),
@@ -441,46 +392,6 @@ class _ReportAccident extends State<ReportAccident> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-//                GestureDetector(
-//                  onTap: () => launchUrl("https://github.com/shivamkapasia0"),
-//                  child: Icon(
-//                    FontAwesomeIcons.github,
-//                    color: Color(0xfffb3958),
-//                    size: 35,
-//                  ),
-//                ),
-//                SizedBox(
-//                  width: MediaQuery.of(context).size.width * 0.06,
-//                ),
-//                GestureDetector(
-//                  onTap: () =>
-//                      launchUrl("https://www.instagram.com/shivaay0o7/"),
-//                  child: Icon(FontAwesomeIcons.instagram,
-//                      color: Color(0xfffb3958), size: 35),
-//                ),
-//                SizedBox(
-//                  width: MediaQuery.of(context).size.width * 0.06,
-//                ),
-//                GestureDetector(
-//                  onTap: () {
-//                    FlutterOpenWhatsapp.sendSingleMessage(
-//                        "918179015345", "Hello");
-//                  },
-//                  child: Icon(FontAwesomeIcons.twitter,
-//                      color: Color(0xfffb3958), size: 35),
-//                ),
-//                SizedBox(
-//                  width: MediaQuery.of(context).size.width * 0.06,
-//                ),
-//                GestureDetector(
-//                  onTap: () {
-//                    getCurrentLocation();
-//                    Share.share('Hey I need your help at ' +
-//                        'https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}');
-//                  },
-//                  child: Icon(FontAwesomeIcons.solidMap,
-//                      color: Color(0xfffb3958), size: 35),
-//                ),
                 RaisedButton(
                     color: Color(0xffffffff),
                     child: Text(
