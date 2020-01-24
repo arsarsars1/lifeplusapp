@@ -1,7 +1,7 @@
 # life +
  Accident Detection App(4th year Project)
 # Purpose:
- our main purpose of app is to Build an app that will detect accident based on vehicle speed and notify other user's about accident with various information including location, time, Email, Speed etc.
+ Our main purpose of app is to Build an app that will detect accident based on vehicle speed and notify other user's about accident with various information including location, time, Email, Speed etc.
 
 # Features
 - [x] Materialistic Design.
