@@ -1,4 +1,4 @@
 # lifeplusapp
  Accident Detection App(4th year Project)
 
-<img src="https://drive.google.com/open?id=1EkrpBgiufncGd9nk4p3fTVyi8bjAeyUS" width="200" height="400"/>
+<img src="https://github.com/shivamkapasia0/lifeplusapp/blob/master/Screenshot/Screenshot_20200124-135944.jpg" width="200" height="400"/>
