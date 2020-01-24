@@ -72,7 +72,7 @@ For announcements about new releases and breaking changes, follow the
 mailing list.
 
 # License
-'''
+```
 MIT License
 
 Copyright (c) 2020 shivamkapasia0
@@ -96,4 +96,4 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 © 2020 GitHub, Inc.
 
-'''
+```
