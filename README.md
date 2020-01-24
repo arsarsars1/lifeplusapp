@@ -19,4 +19,4 @@
 - [ ] to find other user location.
 
 # Screenshots
-<img src="https://github.com/shivamkapasia0/lifeplusapp/blob/master/Screenshot/Screenshot_20200124-135944.jpg" width="200" height="400"/>
+<img src="https://github.com/shivamkapasia0/lifeplusapp/blob/master/Screenshot/12%20(1).jpg" width="200" height="400"/><img src="https://github.com/shivamkapasia0/lifeplusapp/blob/master/Screenshot/12%20(2).jpg" width="200" height="400"/><img src="https://github.com/shivamkapasia0/lifeplusapp/blob/master/Screenshot/12%20(3).jpg" width="200" height="400"/><img src="https://github.com/shivamkapasia0/lifeplusapp/blob/master/Screenshot/2-6.1%20inch%20-%20Galaxy%20S10-screen__1.jpg" width="200" height="400"/><img src="https://github.com/shivamkapasia0/lifeplusapp/blob/master/Screenshot/3-6.1%20inch%20-%20Galaxy%20S10-screen__2.jpg" width="200" height="400"/><img src="https://github.com/shivamkapasia0/lifeplusapp/blob/master/Screenshot/4-6.1%20inch%20-%20Galaxy%20S10-screen__3.jpg" width="200" height="400"/>
