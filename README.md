@@ -62,14 +62,9 @@ cupertino_icons: ^0.1.2
 ```
 ## Documentation
 
-* [Install Flutter](https://flutter.dev/get-started/)
-* [Flutter documentation](https://flutter.dev/docs)
-* [Development wiki](https://github.com/flutter/flutter/wiki)
-* [Contributing to Flutter](https://github.com/flutter/flutter/blob/master/CONTRIBUTING.md)
-
-For announcements about new releases and breaking changes, follow the
-[flutter-announce@googlegroups.com](https://groups.google.com/forum/#!forum/flutter-announce)
-mailing list.
+* Get your google maps api key and paste it in androidmanifest.xml
+* Download google-services.json file and put it under app>>src
+* run flutter clean and rerun the project.
 
 # License
 ```
