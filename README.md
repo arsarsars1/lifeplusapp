@@ -1,3 +1,4 @@
+[img src="https://img.shields.io/github/issues/shivamkapasia0/lifeplusapp"]
 # life +
  Accident Detection App(4th year Project)
 # Purpose:
