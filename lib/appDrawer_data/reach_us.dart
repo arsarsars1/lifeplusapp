@@ -1,4 +1,4 @@
-import 'package:firebase_database/firebase_database.dart';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -9,7 +9,6 @@ class ReachUs extends StatefulWidget {
 }
 
 class _ReachUsState extends State<ReachUs> {
-  final databaseReference = FirebaseDatabase.instance.reference();
   launchUrl(String url) async {
     if (await canLaunch(url)) {
       await launch(url);
@@ -238,30 +237,5 @@ class _ReachUsState extends State<ReachUs> {
     );
   }
 
-  void createRecord() {
-    databaseReference
-        .child("1")
-        .set({'title': 'Accident reported', 'description': 'at location'});
-    databaseReference.child("2").set({
-      'title': 'Accident reported',
-      'description': 'at location',
-      'location': 'longitude & latitude'
-    });
-  }
 
-  void getData() {
-    databaseReference.once().then((DataSnapshot snapshot) {
-      print('Data : ${snapshot.value}');
-    });
-  }
-
-  void updateData() {
-    databaseReference
-        .child('1')
-        .update({'description': 'J2EE complete Reference'});
-  }
-
-  void deleteData() {
-    databaseReference.child('1').remove();
-  }
 }

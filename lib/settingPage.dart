@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_flexible_toast/flutter_flexible_toast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -65,8 +66,15 @@ class SettingPage extends StatelessWidget {
                             fontWeight: FontWeight.w800),
                       ),
                       Switch(
-                        value: true,
-                        onChanged: null,
+                        value: _isNotifications,
+                        activeColor: Colors.blue,
+                        onChanged: (value) async {
+                          showCenterShortLoadingToast();
+                          _isNotifications = false;
+                        },
+                        // activeTrackColor: Theme.of(context).accentColor,
+                        inactiveTrackColor: Theme.of(context).accentColor,
+                        inactiveThumbColor: Theme.of(context).accentColor,
                       ),
                     ],
                   ),
@@ -100,6 +108,7 @@ class SettingPage extends StatelessWidget {
                         value: _isAppUpdates,
                         activeColor: Colors.blue,
                         onChanged: (value) async {
+                          showCenterShortLoadingToast();
                           _isAppUpdates = false;
                         },
                         // activeTrackColor: Theme.of(context).accentColor,
@@ -138,6 +147,7 @@ class SettingPage extends StatelessWidget {
                         value: _isAppUpdates,
                         activeColor: Colors.blue,
                         onChanged: (value) async {
+                          showCenterShortLoadingToast();
                           _isAppUpdates = false;
                         },
                         // activeTrackColor: Theme.of(context).accentColor,
@@ -176,6 +186,7 @@ class SettingPage extends StatelessWidget {
                         value: _isAppUpdates,
                         activeColor: Colors.blue,
                         onChanged: (value) async {
+                          showCenterShortLoadingToast();
                           _isAppUpdates = false;
                         },
                         // activeTrackColor: Theme.of(context).accentColor,
@@ -214,6 +225,7 @@ class SettingPage extends StatelessWidget {
                         value: _isAppUpdates,
                         activeColor: Colors.blue,
                         onChanged: (value) async {
+                          showCenterShortLoadingToast();
                           _isAppUpdates = false;
                         },
                         // activeTrackColor: Theme.of(context).accentColor,
@@ -287,5 +299,18 @@ class SettingPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void showCenterShortLoadingToast() {
+    FlutterFlexibleToast.showToast(
+        message: "Cannot disable due to security concern.",
+        toastLength: Toast.LENGTH_LONG,
+        toastGravity: ToastGravity.CENTER,
+        icon: ICON.INFO,
+        radius: 100,
+        elevation: 10,
+        textColor: Colors.white,
+        backgroundColor: Colors.black,
+        timeInSeconds: 2);
   }
 }

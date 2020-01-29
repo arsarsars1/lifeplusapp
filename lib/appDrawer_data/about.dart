@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lifeplusapp/appDrawer_data/openSourceLicenses.dart';
 import 'package:lifeplusapp/appDrawer_data/privacypolicy.dart';
@@ -17,7 +18,10 @@ class AboutPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+      ),
       child: Scaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: () {
@@ -62,7 +66,7 @@ class AboutPage extends StatelessWidget {
                       backgroundColor: Colors.transparent,
                       radius: MediaQuery.of(context).size.width * 0.107,
                       child: ClipOval(
-                        child: Image.asset("assets/images/icon-image.png"),
+                        child: Image.asset("assets/images/playstore.png"),
                       ),
                     ),
                     SizedBox(

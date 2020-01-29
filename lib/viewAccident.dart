@@ -177,37 +177,6 @@ class _ViewAccident extends State<ViewAccident> {
               height: MediaQuery.of(context).size.height * 0.01,
             ),
             Card(
-              margin: EdgeInsets.all(10.0),
-              elevation: 2.0,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12)),
-              child: Container(
-                padding: EdgeInsets.fromLTRB(20.0, 40.0, 20.0, 30.0),
-                decoration: BoxDecoration(
-                    color: Theme.of(context).cardColor,
-                    borderRadius: BorderRadius.circular(12.0),
-                    image: DecorationImage(
-                        image: AssetImage("assets/images/app.png"),
-                        fit: BoxFit.scaleDown)),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(
-                      'Accident Reported By ' + namee.toString(),
-                      style: TextStyle(
-                          color: Theme.of(context).accentColor,
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.w800),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.01,
-            ),
-            Card(
               color: Colors.green,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12.0),
@@ -240,6 +209,23 @@ class _ViewAccident extends State<ViewAccident> {
                       )),
                     ],
                   ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height * 0.05,
+                  left: 21,
+                  right: 21,
+                  bottom: MediaQuery.of(context).size.height * 0.034),
+              child: Text(
+                "Press Refresh button 2-3 times to fetch recent accident reports",
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                  fontFamily: 'RobotoSlab',
+                  color: Colors.redAccent,
+                  fontSize: 17,
+                  height: 1.3,
                 ),
               ),
             ),

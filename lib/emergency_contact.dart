@@ -3,6 +3,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_flexible_toast/flutter_flexible_toast.dart';
+import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lifeplusapp/signin/services/auth_service.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +17,7 @@ class EmergencyContact extends StatefulWidget {
 
 class _EmergencyContact extends State<EmergencyContact> {
   final databaseReference = FirebaseDatabase.instance.reference();
+
   launchUrl(String url) async {
     if (await canLaunch(url)) {
       await launch(url);
@@ -49,6 +51,22 @@ class _EmergencyContact extends State<EmergencyContact> {
     myPrefs.setBool('syncData', false);
   }
 
+  void savedEmail(String email) async {
+    SharedPreferences myPrefs = await SharedPreferences.getInstance();
+    myPrefs.setString('email', email);
+  }
+
+  void showEmail() async {
+    SharedPreferences myPrefs = await SharedPreferences.getInstance();
+    String email = myPrefs.getString('email');
+    if (email == '') {
+      EmailId = "No Email Found";
+    } else {
+      print(email);
+      EmailId = '+' + email;
+    }
+  }
+
   void showData() async {
     SharedPreferences myPrefs = await SharedPreferences.getInstance();
     String number = myPrefs.getString('number');
@@ -66,6 +84,7 @@ class _EmergencyContact extends State<EmergencyContact> {
   String message;
   String helpMessage = 'jndwenwocne';
   String SenderNmae;
+  String EmailId;
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
@@ -78,19 +97,25 @@ class _EmergencyContact extends State<EmergencyContact> {
               icon: Icon(FontAwesomeIcons.infoCircle),
               color: Theme.of(context).accentColor,
               onPressed: () {
+//                showData();
+//                showEmail();
                 AwesomeDialog(
                         context: context,
                         headerAnimationLoop: false,
                         dialogType: DialogType.INFO,
                         animType: AnimType.BOTTOMSLIDE,
                         tittle: 'INFO',
-                        desc: 'Last saved contact number :' + num,
+                        desc: 'Last saved contact number :' +
+                            num +
+                            '\nLast saved email :' +
+                            EmailId,
+                        //                           '\nLast saved Email : +$EmailId',
 //                        btnCancelOnPress: () {},
                         btnOkOnPress: () {})
                     .show();
               }),
         ],
-        title: Text("My Contacts"),
+        title: Text("Ask Help"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -154,30 +179,62 @@ class _EmergencyContact extends State<EmergencyContact> {
                 ),
               ),
             ),
-            CheckboxListTile(
-              title: Text("Data Protection"),
-              value: checkedValue,
-              onChanged: (bool value) {
-                setState(() {
-                  checkedValue = value;
-                });
-                AwesomeDialog(
-                        context: context,
-                        headerAnimationLoop: false,
-                        dialogType: DialogType.INFO,
-                        animType: AnimType.BOTTOMSLIDE,
-                        tittle: 'Data Protection',
-                        desc:
-                            'By Enabling your data will only be stored locally.',
-//                        btnCancelOnPress: () {},
-                        btnOkOnPress: () {})
-                    .show();
-              },
-              controlAffinity:
-                  ListTileControlAffinity.leading, //  <-- leading Checkbox
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.01,
+            ),
+            Text(
+              "Email id :",
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                fontFamily: 'RobotoSlab',
+                color: Colors.blueGrey[600],
+                fontSize: 17,
+                height: 1.3,
+              ),
             ),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.01,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: TextField(
+//                inputFormatters: [
+//                  WhitelistingTextInputFormatter.digitsOnly,
+//                  LengthLimitingTextInputFormatter(20),
+//                ],
+                onChanged: (val) {
+                  if (val != null || val.length > 0) EmailId = val;
+                },
+                controller: t2,
+                decoration: InputDecoration(
+                  // fillColor: Color(0xffe6e6e6),
+
+                  filled: true,
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                  hintText: 'Ex: lifeplusapp@gmail.com',
+                  hintStyle: TextStyle(
+                      color: Colors.blueGrey, fontFamily: 'RobotoSlab'),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(12),
+                    ),
+                    borderSide: BorderSide(color: Colors.grey[400]),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(12),
+                    ),
+                    borderSide: BorderSide(color: Colors.grey[400]),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(12),
+                    ),
+                    borderSide: BorderSide(color: Colors.grey[400]),
+                  ),
+                ),
+              ),
             ),
             Card(
               color: Colors.green,
@@ -188,25 +245,9 @@ class _EmergencyContact extends State<EmergencyContact> {
               child: GestureDetector(
                 onTap: () {
                   savedData(name);
+                  savedEmail(EmailId);
                   showData();
                   showCenterShortLoadingToast();
-                  AwesomeDialog(
-                          context: context,
-                          headerAnimationLoop: false,
-                          dialogType: DialogType.INFO,
-                          animType: AnimType.BOTTOMSLIDE,
-                          tittle: 'INFO',
-                          desc:
-                              'This number has been saved locally on your phone and will be deleted automatically if you uninstall app.',
-//                        btnCancelOnPress: () {},
-                          btnOkOnPress: () {})
-                      .show();
-//                  setState(() {
-//                    t1.clear();
-//                    t2.clear();
-//                    launchUrl(
-//                        "mailto:lifeplusapp2020@gmail.com?subject=From $name&body=$message");
-//                  });
                 },
                 child: ListTile(
                   title: Row(
@@ -266,8 +307,9 @@ class _EmergencyContact extends State<EmergencyContact> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 GestureDetector(
-                  onTap: () => launchUrl(
-                      "https://github.com/shivamkapasia0/lifeplusapp"),
+                  onTap: () => setState(() {
+                    launchUrl("tel:$num");
+                  }),
                   child: Icon(
                     FontAwesomeIcons.phoneAlt,
                     color: Colors.green,
@@ -290,9 +332,22 @@ class _EmergencyContact extends State<EmergencyContact> {
                   width: MediaQuery.of(context).size.width * 0.06,
                 ),
                 GestureDetector(
-                  onTap: () => _launchURLMail(),
+                  onTap: () => FlutterOpenWhatsapp.sendSingleMessage(
+                      "$num", "Hey I need your help"),
                   child: Icon(FontAwesomeIcons.whatsapp,
                       color: Colors.green, size: 35),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.06,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      launchUrl(
+                          "mailto:$EmailId?subject=From ${user.displayName}&body=$message");
+                    });
+                  },
+                  child: Icon(Icons.email, color: Colors.green, size: 35),
                 ),
               ],
             ),
@@ -315,7 +370,7 @@ class _EmergencyContact extends State<EmergencyContact> {
 
   void showCenterShortLoadingToast() {
     FlutterFlexibleToast.showToast(
-        message: "Number Saved",
+        message: "Info saved ",
         toastLength: Toast.LENGTH_LONG,
         toastGravity: ToastGravity.TOP,
         icon: ICON.SUCCESS,

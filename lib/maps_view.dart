@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:connectivity/connectivity.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:giffy_dialog/giffy_dialog.dart';
 import 'package:lifeplusapp/about_us.dart';
@@ -29,9 +29,11 @@ import 'package:lifeplusapp/signin/common_widgets/platform_alert_dialog.dart';
 import 'package:lifeplusapp/signin/common_widgets/platform_exception_alert_dialog.dart';
 import 'package:lifeplusapp/signin/constants/strings.dart';
 import 'package:lifeplusapp/signin/services/auth_service.dart';
+import 'package:lifeplusapp/timer.dart';
 import 'package:lifeplusapp/viewAccident.dart';
 import 'package:provider/provider.dart';
 import 'package:rounded_floating_app_bar/rounded_floating_app_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MyMap extends StatefulWidget {
   @override
@@ -168,7 +170,35 @@ class MyMapSampleState extends State<MyMap> {
     getVehicleSpeed();
   }
 
-  ///Speed Function
+  ///Location Function
+  double latitude;
+  double longitude;
+
+  Future<void> getCurrentLocation() async {
+    try {
+      Position position = await Geolocator()
+          .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+      latitude = position.latitude;
+      longitude = position.longitude;
+      print(position);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  String num;
+  void showData() async {
+    SharedPreferences myPrefs = await SharedPreferences.getInstance();
+    String number = myPrefs.getString('number');
+    if (number == '') {
+      num = "No Number Found";
+    } else {
+      print(number);
+      num = '+' + number;
+    }
+  }
+
+  //Speed Function
   double speedInMps;
   double speedInKph;
   var speed;
@@ -188,8 +218,9 @@ class MyMapSampleState extends State<MyMap> {
 
         print(speed);
         if (speed >= 70) {
-          if (speed <= 1) {
+          if (speed <= 0) {
             startTimer();
+
             AwesomeDialog(
                 context: context,
                 headerAnimationLoop: false,
@@ -202,6 +233,10 @@ class MyMapSampleState extends State<MyMap> {
                     'Click on Cancel to ignore.',
                 btnCancelOnPress: () {},
                 btnOkOnPress: () {
+                  FlutterOpenWhatsapp.sendSingleMessage(
+                      "$num",
+                      "Hey, I need your help" +
+                          'https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}');
                   Navigator.push(
                       context,
                       MaterialPageRoute<void>(
@@ -315,7 +350,7 @@ class MyMapSampleState extends State<MyMap> {
       appBar: AppBar(
         actions: <Widget>[
           IconButton(
-              icon: Icon(FontAwesomeIcons.powerOff),
+              icon: Icon(FontAwesomeIcons.signOutAlt),
               color: Theme.of(context).accentColor,
               onPressed: () {
                 AwesomeDialog(
@@ -332,7 +367,7 @@ class MyMapSampleState extends State<MyMap> {
               }),
         ],
         title: Text(
-          "Life Plus",
+          "Life +",
           textAlign: TextAlign.center,
           style: TextStyle(
             color: Theme.of(context).accentColor,
@@ -472,49 +507,77 @@ class MyMapSampleState extends State<MyMap> {
             ),
             InkWell(
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute<void>(builder: (context) => ReachUs()));
+                AwesomeDialog(
+                    context: context,
+                    headerAnimationLoop: false,
+                    dialogType: DialogType.INFO,
+                    animType: AnimType.TOPSLIDE,
+                    tittle: 'Sign Out ?',
+                    desc: 'Are you sure to sign out?',
+                    btnCancelOnPress: () {},
+                    btnOkOnPress: () {
+                      _signOut(context);
+                    }).show();
               },
               child: ListTile(
                 leading: Icon(
-                  FontAwesomeIcons.phoneAlt,
+                  FontAwesomeIcons.signOutAlt,
                   color: Theme.of(context).accentColor,
                 ),
                 title: Text(
-                  'Ask Help',
+                  'Sign Out',
                   textScaleFactor: 1.5,
                 ),
               ),
             ),
-            InkWell(
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute<void>(builder: (context) => ReachUs()));
-              },
-              child: ListTile(
-                leading: Icon(
-                  FontAwesomeIcons.bell,
-                  color: Theme.of(context).accentColor,
-                ),
-                trailing: Icon(
-                  FontAwesomeIcons.solidBell,
-                  color: Colors.deepOrange,
-                ),
-                title: Text(
-                  'Notifications',
-                  textScaleFactor: 1.5,
-                ),
-              ),
-            ),
+//            InkWell(
+//              onTap: () {
+//                Navigator.push(
+//                    context,
+//                    MaterialPageRoute<void>(
+//                        builder: (context) => Notificationn()));
+//              },
+//              child: ListTile(
+//                leading: Icon(
+//                  FontAwesomeIcons.bell,
+//                  color: Theme.of(context).accentColor,
+//                ),
+//                title: Text(
+//                  'Notifications',
+//                  textScaleFactor: 1.5,
+//                ),
+//              ),
+//            ),
             Divider(
               thickness: 2.0,
             ),
             InkWell(
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute<void>(
-                        builder: (context) => SettingPage()));
+                showDialog(
+                    context: context,
+                    builder: (_) => NetworkGiffyDialog(
+                          image: Image.network(
+                            "https://raw.githubusercontent.com/Shashank02051997/FancyGifDialog-Android/master/GIF's/gif5.gif",
+                            fit: BoxFit.cover,
+                          ),
+                          entryAnimation: EntryAnimation.TOP_LEFT,
+                          title: Text(
+                            'Settings & Privacy',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 22.0, fontWeight: FontWeight.w600),
+                          ),
+                          description: Text(
+                            'For smooth working of app all settings options has been locked & will be available through future updates, but still you can see setting menu',
+                            textAlign: TextAlign.center,
+                          ),
+                          onOkButtonPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute<void>(
+                                    builder: (context) => SettingPage()));
+                          },
+                        ));
               },
               child: ListTile(
                 leading: Icon(
@@ -631,25 +694,32 @@ class MyMapSampleState extends State<MyMap> {
             subTitleColor: Colors.white,
             backgroundColor: Colors.green,
             onTap: () {
+              getCurrentLocation();
+              showData();
               showDialog(
                   context: context,
                   builder: (_) => NetworkGiffyDialog(
                         image: Image.network(
-                          "https://raw.githubusercontent.com/Shashank02051997/FancyGifDialog-Android/master/GIF's/gif14.gif",
+                          "https://raw.githubusercontent.com/Shashank02051997/FancyGifDialog-Android/master/GIF's/gif7.gif",
                           fit: BoxFit.cover,
                         ),
                         entryAnimation: EntryAnimation.TOP_LEFT,
                         title: Text(
-                          'Help',
+                          'Ask your Friend ',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: 22.0, fontWeight: FontWeight.w600),
                         ),
                         description: Text(
-                          'Press power button 3 times in case of emergency',
+                          'Press power button 3 times in case of emergency.\nclick OK to continue.',
                           textAlign: TextAlign.center,
                         ),
-                        onOkButtonPressed: () {},
+                        onOkButtonPressed: () {
+                          FlutterOpenWhatsapp.sendSingleMessage(
+                              "$num",
+                              "Hey, I need your help, currently at: " +
+                                  ' https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}');
+                        },
                       ));
             },
           ),
@@ -727,100 +797,20 @@ class MyMapSampleState extends State<MyMap> {
                 Align(
                   alignment: Alignment.topRight,
                   child: Container(
-                      margin: EdgeInsets.fromLTRB(0.0, 620.0, 0.0, 0.0),
+                      padding: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.height * 0.7,
+                          bottom: MediaQuery.of(context).size.height * 0.034),
                       child: Column(
                         children: <Widget>[
                           mapButton(_onAddMarkerButtonPressed,
                               Icon(Icons.add_location), Colors.blue),
                           mapButton(_onMapTypeButtonPressed,
                               Icon(FontAwesomeIcons.undo), Colors.blue),
-//                          mapButton(
-//                              _onMapTypeButtonPressed,
-//                              Icon(
-//                                FontAwesomeIcons.heartbeat,
-//                                    fontFamily: CupertinoIcons.iconFont,
-//                                    fontPackage:
-//                                        CupertinoIcons.iconFontPackage),
-//                              ),
-                          //  Colors.green),
-//                          mapButton(
-//                              _onMapTypeButtonPressed,
-//                              Icon(
-//                                IconData(0xf473,
-//                                    fontFamily: CupertinoIcons.iconFont,
-//                                    fontPackage:
-//                                        CupertinoIcons.iconFontPackage),
-//                              ),
-//                              Colors.green),
                         ],
                       )),
                 )
               ]),
             ),
     );
-  }
-}
-
-class ConnectionStatusSingleton {
-  //This creates the single instance by calling the `_internal` constructor specified below
-  static final ConnectionStatusSingleton _singleton =
-      new ConnectionStatusSingleton._internal();
-  ConnectionStatusSingleton._internal();
-
-  //This is what's used to retrieve the instance through the app
-  static ConnectionStatusSingleton getInstance() => _singleton;
-
-  //This tracks the current connection status
-  bool hasConnection = false;
-
-  //This is how we'll allow subscribing to connection changes
-  StreamController connectionChangeController =
-      new StreamController.broadcast();
-
-  //flutter_connectivity
-  final Connectivity _connectivity = Connectivity();
-
-  //Hook into flutter_connectivity's Stream to listen for changes
-  //And check the connection status out of the gate
-  void initialize() {
-    _connectivity.onConnectivityChanged.listen(_connectionChange);
-    checkConnection();
-  }
-
-  Stream get connectionChange => connectionChangeController.stream;
-
-  //A clean up method to close our StreamController
-  //   Because this is meant to exist through the entire application life cycle this isn't
-  //   really an issue
-  void dispose() {
-    connectionChangeController.close();
-  }
-
-  //flutter_connectivity's listener
-  void _connectionChange(ConnectivityResult result) {
-    checkConnection();
-  }
-
-  //The test to actually see if there is a connection
-  Future<bool> checkConnection() async {
-    bool previousConnection = hasConnection;
-
-    try {
-      final result = await InternetAddress.lookup('google.com');
-      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-        hasConnection = true;
-      } else {
-        hasConnection = false;
-      }
-    } on SocketException catch (_) {
-      hasConnection = false;
-    }
-
-    //The connection status changed send out an update to all listeners
-    if (previousConnection != hasConnection) {
-      connectionChangeController.add(hasConnection);
-    }
-
-    return hasConnection;
   }
 }
